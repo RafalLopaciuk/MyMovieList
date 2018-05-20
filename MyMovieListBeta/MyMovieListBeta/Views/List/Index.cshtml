@@ -1,0 +1,69 @@
+﻿@model IEnumerable<MyMovieListBeta.Models.Movie>
+@{
+    ViewBag.Title = "My List";
+}
+
+<div style="color: green;">
+    @ViewBag.Result
+</div><br />
+<div style="color: red;">
+    @ViewBag.Error
+</div>
+
+<table class="table table-hover" style="text-align: center; vertical-align: middle;">
+    <thead>
+        <tr>
+            <th> Poster </th>
+            <th> Title </th>
+            <th> Released Date</th>
+            <th> Your Seance Date </th>
+            <th> Score </th>
+            <th> Modify </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @if (item.Poster != null)
+                {
+                    var base64 = Convert.ToBase64String(item.Poster);
+                    var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+                    <td><img src='@imgsrc' style="max-width:100px; max-height:148px" /></td>
+                }
+                else
+                {
+                    <td style="width:100px; height: 100px;"></td>
+                }
+
+                <td style="width:30%;">@item.Title</td>
+
+                <td>
+                    @if (item.ReleaseDate != null)
+                    {
+                        var DateTimeString = item.ReleaseDate.ToString();
+                        string OnlyDateRD = DateTimeString.Substring(0, 10);
+                        @OnlyDateRD
+                    }
+                </td>
+                   
+                <td>
+                    @if (item.YourSeanceDate != null)
+                    {
+                        var DateTimeString2 = item.YourSeanceDate.ToString();
+                        string OnlyDateYSD = DateTimeString2.Substring(0, 10);
+                        @OnlyDateYSD
+                    }
+                </td>
+               
+                <td style="font-weight: bold; font-size: large;">@item.Score</td>
+
+                <td>
+                    @Html.ActionLink("EDIT", "Index", "Edit", new { item.Id }, new { @class = "btn btn-primary" }) <br /><br />
+                    @Html.ActionLink("DELETE", "Index", "Delete", new { item.Id }, new { @class = "btn btn-danger" })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
