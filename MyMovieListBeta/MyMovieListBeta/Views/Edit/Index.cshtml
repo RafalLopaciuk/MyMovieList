@@ -1,0 +1,96 @@
+﻿@model  MyMovieListBeta.Models.Movie
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    td {
+        padding: 15px;
+    }
+    td.name {
+        text-align: right;
+    }
+</style>
+
+<div>
+    <button style="float: right; margin-right:20px" onclick="location.href='@Url.Action("Index", "List")'" class="btn btn-default"><< BACK</button>
+
+</div>
+
+<h2>@ViewBag.Error</h2>
+<h3>Editing movie:</h3>
+@using (Html.BeginForm("Index", "Edit", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <div>
+        <table>
+            <tbody><tr>
+                <td rowspan="6">
+                    @if (Model.Poster != null)
+                    {
+                        var base64 = Convert.ToBase64String(Model.Poster);
+                        var imgsrc = string.Format("data:image/gif;base64,{0}", base64);
+
+                    <img src='@imgsrc' style="max-width:120px; max-height:177px" />
+                    }
+                    else
+                    {
+                         <i>NO POSTER</i>
+                    }
+                </td>
+                <tr>
+                    <td class="name">TITLE:</td>
+                    <td>@Model.Title</td>
+                    <td>@Html.EditorFor(model => model.Title)</td>
+                    <td style="color:red"> @ViewBag.TitleError</td>
+                </tr>
+                <tr>
+                    <td class="name">RELEASE DATE:</td>
+                    <td>
+                        @if (Model.ReleaseDate != null)
+                        {
+                            var DateTimeString = Model.ReleaseDate.ToString();
+                            string OnlyDateRD = DateTimeString.Substring(0, 10);
+                            @OnlyDateRD
+                        }
+                    </td>
+                    <td>@Html.EditorFor(model => model.ReleaseDate)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="name">YOUR SEANCE DATE:</td>
+                    <td>
+                        @if (Model.YourSeanceDate != null)
+                        {
+                            var DateTimeString2 = Model.YourSeanceDate.ToString();
+                            string OnlyDateYSD = DateTimeString2.Substring(0, 10);
+                            @OnlyDateYSD
+                        }
+                    </td>
+                    <td>@Html.EditorFor(model => model.YourSeanceDate)</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="name">SCORE:</td>
+                    <td>@Model.Score</td>
+                    <td>@Html.DropDownListFor(model => model.Score, Enumerable.Range(0, 11).Select(i => new SelectListItem { Text = i.ToString(), Value = i.ToString() }))</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td class="name">NEW POSTER:</td>
+                    <td colspan="2">
+                        <input type="file" id="imageFile" name="imageFile" />
+                    </td>
+                    <td></td>
+                </tr>
+            </tbody>
+        </table>
+        <br />
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="EDIT" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+<br /><br />
